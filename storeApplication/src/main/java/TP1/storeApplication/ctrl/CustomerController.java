@@ -43,6 +43,13 @@ public class CustomerController {
         }
     }
 
+    @GetMapping("/logout")
+    public RedirectView logout(HttpSession session) {
+        session.invalidate();
+
+        return new RedirectView("/store/home");
+    }
+
     @GetMapping("/store/storeUser")
     public String showStoreUser(HttpSession session, Model model) {
         Customer customer = (Customer) session.getAttribute("customer");

@@ -1,10 +1,13 @@
-<!DOCTYPE html>
-<html lang="en">
+<html xmlns:th="https://www.thymeleaf.org" >
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
 </head>
 <body>
-  <h1>Bonjour</h1>
+    <h1>Bonjour <span th:text="${session.customer?.firstName}">Utilisateur</span></h1>
+    <br>
+    <form action="/logout" method="get">
+        <button type="submit">Se déconnecter</button>
+    </form>
 </body>
 </html>

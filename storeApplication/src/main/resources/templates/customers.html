@@ -2,17 +2,17 @@
 <body>
 <h1>Connexion</h1>
 <form action="/connect" method="POST">
-    email <input name="email">
-    mot de passe <input name="password">
+    email <input name="email" required>
+    mot de passe <input name="password" required>
     <input type="SUBMIT">
 </form>
 <hr>
 <h1>Création d'un nouveau client</h1>
 <form action="/createCustomer" method="POST">
-    email <input name="email">
-    password <input name="password">
-    firstname <input name="firstName">
-    lastname <input name="lastName">
+    email <input name="email" required>
+    password <input name="password" required>
+    firstname <input type="password" name="firstName" required>
+    lastname <input name="lastName" required>
     <input type="SUBMIT">
 </form>
 </body>
