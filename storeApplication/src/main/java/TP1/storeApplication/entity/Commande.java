@@ -1,9 +1,8 @@
 package TP1.storeApplication.entity;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.Id;
-import jakarta.persistence.ManyToOne;
+import jakarta.persistence.*;
+
+import java.util.List;
 
 @Entity
 public class Commande {
@@ -47,4 +46,14 @@ public class Commande {
         this.titre = titre;
     }
 
+    @OneToMany(mappedBy = "commande", cascade = CascadeType.ALL)
+    private List<Ligne> lignes;
+
+    public List<Ligne> getLignes() {
+        return lignes;
+    }
+
+    public void setLignes(List<Ligne> lignes) {
+        this.lignes = lignes;
+    }
 }

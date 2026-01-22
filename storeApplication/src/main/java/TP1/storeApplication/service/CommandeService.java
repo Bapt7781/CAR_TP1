@@ -20,6 +20,10 @@ public class CommandeService {
         return commandeRepository.findByCustomer(customer);
     }
 
+    public Commande getCommandeById(Long id) {
+        return commandeRepository.findById(id).orElse(null);
+    }
+
     public void createCommande(String titre, Customer customer){
         var commande = new Commande(titre, customer);
         commandeRepository.save(commande);

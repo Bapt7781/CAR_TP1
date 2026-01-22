@@ -5,6 +5,7 @@ import TP1.storeApplication.entity.Customer;
 import TP1.storeApplication.service.CommandeService;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -37,15 +38,30 @@ public class CommandeController {
     }
 
     @GetMapping("/store/commande/{id}")
-    public ModelAndView showCommande(@PathVariable Long id, HttpSession session) {
+    public String showCommande(@PathVariable Long id, HttpSession session, Model model) {
+        // 1. Vérification du client
         Customer customer = (Customer) session.getAttribute("customer");
-
         if (customer == null) {
-            return new ModelAndView("/store/home");
+            return "redirect:/store/home";
         }
 
-        var model = Map.of("customer", customer);
-        return new ModelAndView("commandeDetails", model);
+        // 2. Récupération de la commande
+        Commande commande = commandeService.getCommandeById(id);
+
+        // DEBUG : Regardez dans votre console IntelliJ quand vous cliquez sur la commande
+        System.out.println("ID demandé : " + id);
+        if (commande != null) {
+            System.out.println("Commande trouvée : " + commande.getTitre());
+        } else {
+            System.out.println("ERREUR : Commande introuvable pour l'ID " + id);
+        }
+
+        // 3. Ajout des variables au modèle (C'est ici que ça doit matcher avec le HTML)
+        model.addAttribute("customer", customer);
+        model.addAttribute("commande", commande); // Le nom "commande" doit être identique au ${commande} du HTML
+
+        // 4. Renvoi vers la vue (Attention au "s" si votre fichier s'appelle commandeDetails.html)
+        return "commandeDetails";
     }
 
     @PostMapping("/createCommande")
