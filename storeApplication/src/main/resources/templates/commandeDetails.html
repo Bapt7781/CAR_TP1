@@ -7,7 +7,9 @@
 <h1>Bonjour <span th:text="${customer.firstName}">Client</span></h1>
 
 <h2>Commande : <span th:text="${commande.titre}">Titre</span></h2>
-
+<br>
+<a th:href="@{/store/commande/imprimer/{id}(id=${commande.id})}">Imprimer la commande</a>
+<br>
 <h3>Lignes de commande</h3>
 
 <ul>

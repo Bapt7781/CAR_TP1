@@ -39,16 +39,13 @@ public class CommandeController {
 
     @GetMapping("/store/commande/{id}")
     public String showCommande(@PathVariable Long id, HttpSession session, Model model) {
-        // 1. Vérification du client
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null) {
             return "redirect:/store/home";
         }
 
-        // 2. Récupération de la commande
         Commande commande = commandeService.getCommandeById(id);
 
-        // DEBUG : Regardez dans votre console IntelliJ quand vous cliquez sur la commande
         System.out.println("ID demandé : " + id);
         if (commande != null) {
             System.out.println("Commande trouvée : " + commande.getTitre());
@@ -56,11 +53,9 @@ public class CommandeController {
             System.out.println("ERREUR : Commande introuvable pour l'ID " + id);
         }
 
-        // 3. Ajout des variables au modèle (C'est ici que ça doit matcher avec le HTML)
         model.addAttribute("customer", customer);
-        model.addAttribute("commande", commande); // Le nom "commande" doit être identique au ${commande} du HTML
+        model.addAttribute("commande", commande);
 
-        // 4. Renvoi vers la vue (Attention au "s" si votre fichier s'appelle commandeDetails.html)
         return "commandeDetails";
     }
 
@@ -69,5 +64,24 @@ public class CommandeController {
         Customer customer = (Customer) session.getAttribute("customer");
         commandeService.createCommande(titre, customer);
         return new RedirectView("/store/storeUser");
+    }
+
+    @GetMapping("/store/commande/imprimer/{id}")
+    public String printCommande(@PathVariable Long id, HttpSession session, Model model) {
+        Customer customer = (Customer) session.getAttribute("customer");
+
+        Commande commande = commandeService.getCommandeById(id);
+
+
+        double totalGlobal = 0.0;
+        for (TP1.storeApplication.entity.Ligne ligne : commande.getLignes()) {
+            totalGlobal += ligne.getQuantite() * ligne.getPrixUnitaire();
+        }
+
+        model.addAttribute("customer", customer);
+        model.addAttribute("commande", commande);
+        model.addAttribute("totalGlobal", totalGlobal);
+
+        return "commandePrint";
     }
 }
