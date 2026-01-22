@@ -31,6 +31,10 @@ public class CommandeController {
 
         Customer customer = (Customer) session.getAttribute("customer");
 
+        if (customer == null) {
+            return new ModelAndView("/store/home");
+        }
+
             List<Commande> mesCommandes = commandeService.getCommandesByCustomer(customer);
             var model = Map.of("commandes", mesCommandes);
             return new ModelAndView("storeUser", model);
@@ -41,16 +45,13 @@ public class CommandeController {
     public String showCommande(@PathVariable Long id, HttpSession session, Model model) {
         Customer customer = (Customer) session.getAttribute("customer");
         if (customer == null) {
-            return "redirect:/store/home";
+            return "/store/home";
         }
 
         Commande commande = commandeService.getCommandeById(id);
 
-        System.out.println("ID demandé : " + id);
-        if (commande != null) {
-            System.out.println("Commande trouvée : " + commande.getTitre());
-        } else {
-            System.out.println("ERREUR : Commande introuvable pour l'ID " + id);
+        if (commande != null && !commande.getCustomer().getEmail().equals(customer.getEmail())) {
+            return "/store/storeUser";
         }
 
         model.addAttribute("customer", customer);
@@ -62,6 +63,11 @@ public class CommandeController {
     @PostMapping("/createCommande")
     public RedirectView createCommande(@RequestParam String titre, HttpSession session){
         Customer customer = (Customer) session.getAttribute("customer");
+
+        if (customer == null) {
+            return new RedirectView("/store/home");
+        }
+
         commandeService.createCommande(titre, customer);
         return new RedirectView("/store/storeUser");
     }
@@ -69,9 +75,13 @@ public class CommandeController {
     @GetMapping("/store/commande/imprimer/{id}")
     public String printCommande(@PathVariable Long id, HttpSession session, Model model) {
         Customer customer = (Customer) session.getAttribute("customer");
-
+        if (customer == null) {
+            return "/store/home";
+        }
         Commande commande = commandeService.getCommandeById(id);
-
+        if (commande == null || !commande.getCustomer().getEmail().equals(customer.getEmail())) {
+            return "/store/storeUser";
+        }
 
         double totalGlobal = 0.0;
         for (TP1.storeApplication.entity.Ligne ligne : commande.getLignes()) {
