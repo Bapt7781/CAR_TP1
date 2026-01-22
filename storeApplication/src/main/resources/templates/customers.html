@@ -3,15 +3,15 @@
 <h1>Connexion</h1>
 <form action="/connect" method="POST">
     email <input name="email" required>
-    mot de passe <input name="password" required>
+    mot de passe <input type="password" name="password" required>
     <input type="SUBMIT">
 </form>
 <hr>
 <h1>Création d'un nouveau client</h1>
 <form action="/createCustomer" method="POST">
     email <input name="email" required>
-    password <input name="password" required>
-    firstname <input type="password" name="firstName" required>
+    password <input type="password" name="password" required>
+    firstname <input name="firstName" required>
     lastname <input name="lastName" required>
     <input type="SUBMIT">
 </form>

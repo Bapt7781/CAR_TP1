@@ -50,15 +50,6 @@ public class CustomerController {
         return new RedirectView("/store/home");
     }
 
-    @GetMapping("/store/storeUser")
-    public String showStoreUser(HttpSession session, Model model) {
-        Customer customer = (Customer) session.getAttribute("customer");
-
-        model.addAttribute("customer", customer);
-
-        return "storeUser";
-    }
-
     @GetMapping("/store/home")
     public ModelAndView home(){
         Iterable<Customer> customers = customerService.readAllCustomers();
